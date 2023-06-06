@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+encoded_client="$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | gbase64 -w 0)"
+refresh_token="$(jq -r '.refresh_token' < tokens.json)"
+
+# get tokens
+data="$(
+  curl \
+    -H "Authorization: Basic $encoded_client" \
+    --data-urlencode "refresh_token=$refresh_token" \
+    --data-urlencode 'grant_type=refresh_token' \
+    "https://zoom.us/oauth/token"
+)"
+
+# save tokens
+jq '{ access_token, refresh_token }' <<< "$data" > tokens.json

@@ -1,0 +1,9 @@
+# macos
+.DS_Store
+
+# tokens
+.envrc
+tokens.json
+
+# python
+__pycache__
